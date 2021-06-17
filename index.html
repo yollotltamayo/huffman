@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+    <style>
+pre {
+    width :200px;
+word-break: break-all;
+}
+      #text {
+word-break: break-all;
+      }
+    </style>
+  <script>
+    var Module = {
+      onRuntimeInitialized: function() {
+        console.log('lerp result: ' + Module.encode("ollol"));
+      }
+    };
+    const input = () => {
+        var inputVal = document.getElementById("fname").value;
+        var text = Module.encode(inputVal);
+        document.getElementById('ans').innerText = text;
+    }
+  </script>
+  <label for="fname">Ingresa texto</label>
+  <input type="text" id="fname" name="fname">
+  <button onclick="input()">Click me!</button>
+  <script src="huff.js"></script>
+  <pre id="ans"></pre>
+</html>
