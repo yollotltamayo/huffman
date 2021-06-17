@@ -34,27 +34,23 @@ struct pq {
     void push(nodo k) {
         aux = last + 1;
         arr[aux] = k;
-        while(aux > 1 && arr[aux].cta < arr[aux/2].cta ) {
-            swap(arr[aux],arr[aux/2]);
-            aux /= 2;
+        while(aux > 1 && arr[aux].cta < arr[aux>>1].cta ) {
+            swap(arr[aux],arr[aux>>1]);
+            aux >>= 1;
         }
         last++;
     }
     void pop() {
         aux = 2;
         if(last == 0 ) return;
-        //arr[1] = (last != 1 ? arr[last] : nodo(0,""));
-        //if(last == 1) {
-            //cout<<arr[last].id<<" "<<arr[last].cta<<endl;
-        //}
         arr[1] = arr[last] ;
         last--;
-        while(aux/2 <= last  && aux <= last) {
+        while(aux>>1 <= last  && aux <= last) {
             if( aux  + 1 <= last && arr[aux  + 1].cta  <= arr[aux].cta ) 
                aux += 1; 
-            if( arr[aux/2].cta < arr[aux].cta)
+            if( arr[aux>>1].cta < arr[aux].cta)
                 break;
-            swap(arr[aux/2],arr[aux]);
+            swap(arr[aux>>1],arr[aux]);
             aux *= 2;
         }
     }
@@ -64,35 +60,23 @@ struct pq {
 };
 
 
-//string  EMSCRIPTEN_KEEPALIVE encode(string inp ) {
 string  encode(string inp ) {
         pq q;    
         tags.clear();
         map<string, int>freq;
         for(auto c: inp){freq[string(1,c)]++;}
-        for(auto &&[k,v] : freq) { q.push(nodo(v,k));}//;cout<<k<<" "<<v<<endl; }
+        for(auto &&[k,v] : freq) { q.push(nodo(v,k));}
 
-        //while(!q.empty() ) {
-            //cout<<q.front().id<<" "<<q.front().cta<<endl;
-            //q.pop();
-        //}
         while(q.size() >= 2 ) {
             nodo left = q.front();q.pop();
-            //cout<<left.id<<" L "<<left.cta<<endl;;
             nodo right = q.front();q.pop();
-            //cout<<right.id<<" R "<<right.cta<<endl;;
             nodo join = nodo(left + right ) ;
             join.left = new nodo(left);
             join.right = new nodo(right);
-            //cout<<q.front().id<<endl;
             q.push(join);
         }
         nodo root = q.front();
-        cout<<root.id<<endl;
         dfs(root);
-        //cout<<root.left->left->id<<endl;
-        //for(auto &&[k,v] : tags)
-            //cout<<k<<" "<<v<<endl;
         string ans = "";
         for(auto c: inp)ans += tags[string(1,c)];
         return ans;
@@ -101,8 +85,6 @@ string  encode(string inp ) {
 int main() {
     pq q;
     string inp="A_DEAD_DAD_CEDED_A_BAD_BABE_A_BEADED_ABACA_BED#";
-    //getline(cin,inp);
-
 }
 
 EMSCRIPTEN_BINDINGS(module) {
